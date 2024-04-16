@@ -44,13 +44,13 @@ saveas(gcf,'luir_iter_hcond.png')
 figure(4)
 plot(sizes, itergm);
 title("gmres: iterations vs matrix size (high condition number)")
-saveas(gcf,'luir_iter_hcond.png')
+saveas(gcf,'gmres_iter_hcond.png')
 
 figure(5)
 plot(sizes, timelu);
-title("luir: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+title("luir: time vs matrix size (high condition number)")
+saveas(gcf,'luir_time_hcond.png')
 figure(6)
 plot(sizes, timegm);
-title("gmres: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+title("gmres: time vs matrix size (high condition number)")
+saveas(gcf,'gmres_time_hcond.png')
