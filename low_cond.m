@@ -35,22 +35,22 @@ saveas(gcf,'luir_acc_lcond.png')
 figure(2)
 semilogy(sizes, relresgm);
 title("gmres: accuracy vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+saveas(gcf,'gmres_acc_lcond.png')
 
 figure(3)
 plot(sizes, iterlu);
 title("luir: iterations vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+saveas(gcf,'luir_iter_lcond.png')
 figure(4)
 plot(sizes, itergm);
 title("gmres: iterations vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+saveas(gcf,'gmres_iter_lcond.png')
 
 figure(5)
 plot(sizes, timelu);
 title("luir: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+saveas(gcf,'luir_time_lcond.png')
 figure(6)
 plot(sizes, timegm);
 title("gmres: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+saveas(gcf,'gmres_time_lcond.png')

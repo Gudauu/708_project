@@ -30,27 +30,27 @@ end
 
 figure(1)
 semilogy(cond, relreslu);
-title("luir: accuracy vs condition (large matrix - n=10000)")
+title("luir: accuracy vs condition (large matrix - n=5000)")
 saveas(gcf,'luir_acc_lmat.png')
 figure(2)
 semilogy(cond, relresgm);
-title("gmres: accuracy vs condition (large matrix - n=10000)")
+title("gmres: accuracy vs condition (large matrix - n=5000)")
 saveas(gcf,'gmres_acc_lmat.png')
 
 figure(3)
 plot(cond, iterlu);
-title("luir: iterations vs condition (large matrix - n=10000)")
+title("luir: iterations vs condition (large matrix - n=5000)")
 saveas(gcf,'luir_iter_lmat.png')
 figure(4)
 plot(cond, itergm);
-title("gmres: iterations vs condition (large matrix - n=10000)")
+title("gmres: iterations vs condition (large matrix - n=5000)")
 saveas(gcf,'gmres_iter_lmat.png')
 
 figure(5)
-plot(sizes, timelu);
-title("luir: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+plot(cond, timelu);
+title("luir: time vs condition (large matrix - n=5000)")
+saveas(gcf,'luir_time_lmat.png')
 figure(6)
-plot(sizes, timegm);
-title("gmres: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+plot(cond, timegm);
+title("gmres: time vs condition (large matrix - n=5000)")
+saveas(gcf,'gmres_time_lmat.png')

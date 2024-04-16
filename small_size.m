@@ -46,10 +46,10 @@ title("gmres: iterations vs condition (small matrix - 500x500)")
 saveas(gcf,'gmres_iter_smat.png')
 
 figure(5)
-plot(sizes, timelu);
-title("luir: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+plot(cond, timelu);
+title("luir: time vs condition (small matrix - 500x500)")
+saveas(gcf,'luir_time_smat.png')
 figure(6)
-plot(sizes, timegm);
-title("gmres: time vs matrix size (low condition number)")
-saveas(gcf,'luir_acc_lcond.png')
+plot(cond, timegm);
+title("gmres: time vs condition (small matrix - 500x500)")
+saveas(gcf,'gmres_time_smat.png')
