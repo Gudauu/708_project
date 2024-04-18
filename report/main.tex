@@ -1,0 +1,60 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{setspace}
+\doublespacing
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+
+\begin{document}
+%
+\title{GMRES-based Iterative Refinement for
+Solving Linear Systems}
+
+
+\author{Shutong Wu\thanks{wu867@mcmaster.ca}, Valerie Vreugdenhil\thanks{vreugdev@mcmaster.ca}, Gaofeng Zhou\thanks{zhoug28@mcmaster.ca}}
+%
+%
+\maketitle             
+\newpage
+\tableofcontents
+\newpage
+\input{Keyfeatures}
+\input{Literature_review_comparison}
+\input{Experiments}
+\input{Analysis}
+
+
+\bibliographystyle{refs-style}
+\bibliography{refs}
+%
+\end{document}
