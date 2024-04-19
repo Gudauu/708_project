@@ -28,28 +28,31 @@ for i = 1:size(matrices,2)
 end
 
 figure(1)
-semilogy(cond, relreslu);
-title("luir: accuracy vs condition (small matrix - 500x500)")
+loglog(cond, relreslu);
+title("luir: Relative Residual vs Condition Number (n = 500)")
+xlabel("Condition Number")
+ylabel("Relative Residual")
 saveas(gcf,'luir_acc_smat.png')
 figure(2)
-semilogy(cond, relresgm);
-title("gmres: accuracy vs condition (small matrix - 500x500)")
+loglog(cond, relresgm);
+title("gmres: Relative Residual vs Condition Number (n = 500)")
+xlabel("Condition Number")
+ylabel("Relative Residual")
 saveas(gcf,'gmres_acc_smat.png')
 
 figure(3)
-plot(cond, iterlu);
-title("luir: iterations vs condition (small matrix - 500x500)")
-saveas(gcf,'luir_iter_smat.png')
-figure(4)
-plot(cond, itergm);
-title("gmres: iterations vs condition (small matrix - 500x500)")
-saveas(gcf,'gmres_iter_smat.png')
+semilogx(cond, iterlu, cond, itergm);
+title("Iterations vs Condition Number (n = 500)")
+xlabel("Condition Number")
+ylabel("Number of Iterations")
+legend("luir", "gmres")
+saveas(gcf,'iter_smat.png')
 
-figure(5)
-plot(cond, timelu);
-title("luir: time vs condition (small matrix - 500x500)")
-saveas(gcf,'luir_time_smat.png')
-figure(6)
-plot(cond, timegm);
-title("gmres: time vs condition (small matrix - 500x500)")
-saveas(gcf,'gmres_time_smat.png')
+figure(4)
+semilogx(cond, timelu, cond, timegm);
+title("Time vs Condition Number (n = 500)")
+xlabel("Condition Number")
+ylabel("Time (seconds)")
+legend("luir", "gmres")
+saveas(gcf,'time_smat.png')
+

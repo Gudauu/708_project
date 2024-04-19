@@ -30,27 +30,29 @@ end
 
 figure(1)
 semilogy(sizes, relreslu);
-title("luir: accuracy vs matrix size (low condition number)")
+title("luir: Relative Residual vs Matrix Size (condition = 1e2)")
+xlabel("Matrix Size")
+ylabel("Relative Residual")
 saveas(gcf,'luir_acc_lcond.png')
 figure(2)
 semilogy(sizes, relresgm);
-title("gmres: accuracy vs matrix size (low condition number)")
+title("gmres: Relative Residual vs Matrix Size (condition = 1e2)")
+xlabel("Matrix Size")
+ylabel("Relative Residual")
 saveas(gcf,'gmres_acc_lcond.png')
 
 figure(3)
-plot(sizes, iterlu);
-title("luir: iterations vs matrix size (low condition number)")
-saveas(gcf,'luir_iter_lcond.png')
-figure(4)
-plot(sizes, itergm);
-title("gmres: iterations vs matrix size (low condition number)")
-saveas(gcf,'gmres_iter_lcond.png')
+plot(sizes, iterlu, sizes, itergm);
+title("Iterations vs Matrix Size (condition = 1e2)")
+xlabel("Matrix Size")
+ylabel("Number of Iterations")
+legend("luir", "gmres")
+saveas(gcf,'iter_lcond.png')
 
-figure(5)
-plot(sizes, timelu);
-title("luir: time vs matrix size (low condition number)")
-saveas(gcf,'luir_time_lcond.png')
-figure(6)
-plot(sizes, timegm);
-title("gmres: time vs matrix size (low condition number)")
-saveas(gcf,'gmres_time_lcond.png')
+figure(4)
+plot(sizes, timelu, sizes, timegm);
+title("Time vs Matrix Size (condition = 1e2)")
+xlabel("Matrix Size")
+ylabel("Time (seconds)")
+legend("luir", "gmres")
+saveas(gcf,'time_lcond.png')
