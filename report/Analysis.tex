@@ -4,7 +4,7 @@
     \begin{itemize}
         \item GMRES:
         \begin{itemize}
-            \item Time vs.Condition Number:
+            \item Time vs. Condition Number:
             \begin{itemize}
                 \item     The time required by GMRES slightly decreases as the condition number increases, but it stabilizes for higher condition numbers.
                 \item This pattern might be due to the nature of iterative methods like GMRES that can exhibit complex relationships with condition numbers depending on factors such as preconditioning, stopping criteria, and the specific characteristics of the matrix.
@@ -79,7 +79,6 @@
                 \item The decreasing number of iterations required as the condition number increases further supports the observed decrease in computational time.
                 \item This suggests that the algorithm requires fewer iterations to converge for matrices with higher condition numbers. However, this is an unusual pattern and may warrant investigation into the specifics of the implementation or the nature of the matrices used.
             \end{itemize}
-            \item The initial overhead might include factors like memory allocation, construction of the LU decomposition, and other once-off computations.
             \item Accuracy vs. Condition Number:
             \begin{itemize}
                 \item As expected, the accuracy worsens with increasing condition numbers, reflecting the typical behavior where higher condition numbers indicate a system that is more difficult to solve accurately due to increased numerical instability.
@@ -179,7 +178,7 @@
         \end{itemize}
         \item Comparative Analysis:
         \begin{itemize}
-            \item  Time vs. Matrix Size:
+            \item Time vs. Matrix Size:
             \begin{itemize}
                 \item GMRES shows a near-linear increase in computational time with the size of the matrix. This performance is remarkable, considering that iterative methods can be sensitive to matrix conditioning. The near-linear relationship might be a consequence of effective preconditioning or the specific matrix structures enabling more efficient computation.
             \end{itemize}
