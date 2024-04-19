@@ -1,0 +1,50 @@
+\section{Conclusion}
+Based on the results of the experiment, a general conclusion on the performance of GMRES versus LU-IR can be drawn with respect to solving systems of linear equations across various matrices sizes and condition numbers.\\
+\begin{itemize}
+
+    \item \textbf{Computational Time:}
+    \begin{itemize}
+        \item GMRES consistently demonstrated near-linear scaling of computational time with respect to both matrix size and condition number, suggesting efficient management of computational resources even as problem size grows.
+        \item LU-IR displayed a quadratic increase in time with matrix size for well-conditioned matrices, which is typical of direct methods, but showed an atypical decrease in time for poorly conditioned systems. This may point to a peculiarity in the matrices used or the specific implementation of LU-IR.
+    \end{itemize}
+    \item \textbf{Iterations:}
+    \begin{itemize}
+        \item GMRES was remarkably stable in the number of iterations across different matrix sizes and condition numbers, highlighting its robustness as an iterative method.
+        \item LU-IR exhibited a decrease in the number of iterations required as the matrix size increased for ill-conditioned matrices, which is counterintuitive and warrants further investigation into the method's characteristics and convergence criteria.
+    \end{itemize}
+    \item \textbf{Accuracy:}
+    \begin{itemize}
+        \item GMRES showed a slight decrease in accuracy with increasing matrix size, which is a common trend due to accumulating numerical errors, but it maintained reasonable accuracy across condition numbers.
+        \item LU-IR saw its accuracy suffer significantly with higher condition numbers and larger matrix sizes, suggesting it may be more sensitive to numerical instability inherent in ill-conditioned problems.
+    \end{itemize}
+    \item \textbf{Overall Observations:}
+    \begin{itemize}
+        \item GMRES seems to be the more stable and scalable method, particularly for large and poorly conditioned matrices. Its iterative nature and potential use of preconditioning techniques appear to make it well-suited to tackle a variety of problems efficiently.
+        \item LU-IR may be more affected by the condition number and matrix size, possibly requiring careful consideration of precision and convergence criteria to ensure accurate solutions.
+    \end{itemize}
+    \item \textbf{Conclusion:}
+    The results suggest that while both GMRES and LU-IR can be effective for solving linear systems, GMRES generally offers more stable and predictable performance, especially as matrix size and condition numbers grow. LU-IR might still be competitive for smaller or well-conditioned matrices, but its performance can vary significantly with problem characteristics. 
+    
+
+\end{itemize}
+\clearpage
+
+
+    
+
+
+
+    
+    
+
+
+
+    
+    
+
+
+
+    
+
+
+
