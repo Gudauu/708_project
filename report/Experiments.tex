@@ -2,7 +2,7 @@
 
 \subsection{Matrix Generation and Results}
 We use several functions to generate those matrices we need to do this experiment.
-\begin{lstlisting}[language=Matlab, caption=generating matrix with the specified condition number]
+\begin{lstlisting}[language=Matlab, caption=generating matrices with the specified condition number]
 function A = genMatrix(size, cond)
     A = 2*rand(size);
     [u, s, v] = svd(A);
