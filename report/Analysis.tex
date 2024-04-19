@@ -1,0 +1,205 @@
+\section{Results Analysis}
+\begin{enumerate}
+    \item \textbf{Small size matrix: }
+    \begin{itemize}
+        \item GMRES:
+        \begin{itemize}
+            \item Time vs.Condition Number:
+            \begin{itemize}
+                \item     The time required by GMRES slightly decreases as the condition number increases, but it stabilizes for higher condition numbers.
+                \item This pattern might be due to the nature of iterative methods like GMRES that can exhibit complex relationships with condition numbers depending on factors such as preconditioning, stopping criteria, and the specific characteristics of the matrix.
+            \end{itemize}
+           \item Iterations vs. Condition Number:
+           \begin{itemize}
+               \item     GMRES shows a remarkably stable number of iterations across the range of condition numbers.
+               \item This stability is a hallmark of well-implemented iterative methods that are not significantly impacted by the condition number, particularly for small matrix sizes.
+           \end{itemize}
+           \item Accuracy vs. Condition Number:
+           \begin{itemize}
+               \item GMRES's accuracy deteriorates as the condition number increases, which is typical behavior as higher condition numbers usually result in less accurate solutions due to the potential for error amplification.
+           \end{itemize}   
+        \end{itemize}
+        \item LU-IR:
+        \begin{itemize}
+            \item Time vs. Condition Number:
+            \begin{itemize}
+                \item The graph exhibits a decreasing trend in time with increasing condition numbers, which is unconventional as higher condition numbers typically imply a more ill-conditioned matrix and could require more computational effort.
+                \item A potential explanation for this trend could be the specific characteristics of the matrix at different condition numbers or the way the iterative refinement is implemented, possibly needing fewer corrections for higher condition numbers.
+            \end{itemize}
+           \item Iterations vs. Condition Number:
+           \begin{itemize}
+               \item  The downward trend in the number of iterations as the condition number increases aligns with the trend in computational time.
+              \item This suggests that for LU-IR, higher condition numbers are somehow resulting in fewer iterations to reach convergence, which is an interesting observation and could be due to the interplay between the condition number and the convergence criteria of the algorithm.
+           \end{itemize}
+           \item Accuracy vs. Condition Number:
+           \begin{itemize}
+               \item The accuracy graph shows a clear inverse correlation between accuracy and condition number; as the condition number increases, the accuracy of the solution decreases.
+              \item This is expected since a higher condition number typically indicates a matrix that is closer to being singular or ill-conditioned, leading to larger errors in the solution.
+           \end{itemize}
+        \end{itemize}
+        \item Comparative Analysis:
+        \begin{itemize}
+            \item Comparing the LU-IR to GMRES, GMRES shows better stability in terms of iterations, but both methods display the expected decrease in accuracy with higher condition numbers.
+           \item For the LU-IR method, there's an interesting correlation where both the time and number of iterations decrease with increasing condition numbers, yet the accuracy worsens. This might suggest that the iterative refinements are prematurely terminated or become less effective as the matrix becomes more ill-conditioned.
+           \item The computational time trends for both methods against the condition number are not typical and might suggest implementation details, such as the effect of stopping criteria or preconditioning, which have a more significant impact than the condition number itself.
+        \end{itemize}
+        \item Conclusion:
+        \begin{itemize}
+            \item The results suggest that both algorithms maintain a certain level of robustness in the face of varying condition numbers. However, the loss of accuracy with increasing condition number is consistent with the mathematical theory that higher condition numbers lead to more numerical instability.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Large size matrix:}
+    \begin{itemize}
+        \item GMRES:
+        \begin{itemize}
+            \item Time vs. Condition Number:
+            \begin{itemize}
+                \item GMRES shows a mild decrease in time with increasing condition numbers, eventually reaching a stable point.
+                \item This might suggest that GMRES, as an iterative method, is less affected by higher condition numbers, possibly due to good preconditioning that mitigates the effects of ill-conditioning.
+            \end{itemize}
+            \item Iterations vs. Condition Number:
+            \begin{itemize}
+                \item The GMRES method displays a consistent number of iterations across various condition numbers, indicating stable convergence properties.
+                \item The stability of iterations suggests that GMRES is quite robust to changes in the condition number, at least for the matrix sizes and condition numbers tested.
+            \end{itemize}
+            \item Accuracy vs. Condition Number:
+            \begin{itemize}
+                \item GMRES accuracy decreases with an increase in the condition number, which is consistent with expectations. High condition numbers lead to lower accuracy due to the potential amplification of errors in iterative methods.
+            \end{itemize}
+        \end{itemize}
+        \item LU-IR:
+        \begin{itemize}
+            \item  Time vs. Condition Number:
+            \begin{itemize}
+                \item The computational time decreases with an increase in condition numbers, which is a trend that does not align with the typical expectation that higher condition numbers lead to more computational work.
+               \item  The decrease may be explained by certain optimizations or behaviors specific to the LU-IR method that make the computational cost less sensitive to changes in the condition number for this range of matrix sizes.
+            \end{itemize}
+            \item Iterations vs. Condition Number:
+            \begin{itemize}
+                \item The decreasing number of iterations required as the condition number increases further supports the observed decrease in computational time.
+                \item This suggests that the algorithm requires fewer iterations to converge for matrices with higher condition numbers. However, this is an unusual pattern and may warrant investigation into the specifics of the implementation or the nature of the matrices used.
+            \end{itemize}
+            \item The initial overhead might include factors like memory allocation, construction of the LU decomposition, and other once-off computations.
+            \item Accuracy vs. Condition Number:
+            \begin{itemize}
+                \item As expected, the accuracy worsens with increasing condition numbers, reflecting the typical behavior where higher condition numbers indicate a system that is more difficult to solve accurately due to increased numerical instability.
+            \end{itemize}
+        \end{itemize}
+        \item Comparative Analysis:
+        \begin{itemize}
+            \item  Both methods exhibit the expected degradation of accuracy with higher condition numbers.
+            \item The number of iterations and computational time patterns for LU-IR with respect to condition number are unconventional and could be specific to the particular matrices tested or the implementation of the algorithm.
+            \item GMRES shows a mild decrease in time but maintains a consistent number of iterations, indicating its potential robustness and efficiency as the condition number increases.
+        \end{itemize}
+        \item Conclusion:
+        \begin{itemize}
+            \item The observations suggest that GMRES is more stable with respect to the number of iterations and time against increasing condition numbers for the tested large matrix. This aligns with the expectations of iterative methods like GMRES, which can be designed to be more resilient to changes in condition numbers.
+           \item For LU-IR, the decrease in time and iterations with increasing condition numbers is an intriguing behavior that may indicate unique properties of the method or the particular systems being solved.
+           \item The degradation in accuracy for both methods is consistent with the mathematical challenges posed by high condition numbers.
+        \end{itemize}
+        
+    \end{itemize}
+    \item \textbf{Low condition numbered matrix:}
+    \begin{itemize}
+        \item GMRES:
+        \begin{itemize}
+            \item  Time vs. Matrix Size:
+            \begin{itemize}
+                \item The computational time for GMRES increases nearly linearly with matrix size, which is excellent scaling behavior for an iterative method, particularly since the theoretical complexity for solving linear systems using Krylov subspace methods like GMRES is often higher.
+            \end{itemize}
+            \item Iterations vs. Matrix Size:
+            \begin{itemize}
+                \item The number of iterations remains almost constant, which is indicative of the robustness of the GMRES algorithm with respect to matrix size, especially given that the condition number is low.
+            \end{itemize}
+            \item Accuracy vs. Matrix Size:
+            \begin{itemize}
+                \item GMRES maintains high accuracy across matrix sizes, showing a slight decrease as size increases. This is consistent with expectations as larger systems can amplify numerical errors, but the impact here is minimal, benefiting from the low condition number.
+            \end{itemize}
+        \end{itemize}
+        \item LU-IR:
+        \begin{itemize}
+            \item Time vs. Matrix Size:
+            \begin{itemize}
+                \item The time taken by LU-IR increases in what appears to be a quadratic manner with the size of the matrix, which is expected as the LU decomposition has a computational complexity of $O(n^3)$ for dense matrices. However, the observed trend might suggest a slightly better performance, possibly due to the low condition number or specific matrix structure allowing faster computation.
+            \end{itemize}
+            \item Iterations vs. Matrix Size :
+            \begin{itemize}
+                \item The number of iterations increases linearly with the matrix size. Since the condition number is low, the linear systems are well-conditioned, and thus the iterative refinement process converges relatively quickly, leading to a predictable increase in iterations with size.
+            \end{itemize}
+            
+            \item Accuracy vs. Matrix Size:
+            \begin{itemize}
+                \item The accuracy remains high across different matrix sizes, which suggests that the LU-IR method is capable of producing accurate results for well-conditioned matrices. The slight decrease in accuracy with size might be attributed to the accumulation of numerical errors as the size increases.
+            \end{itemize}
+        \end{itemize}
+        \item Comparative Analysis:
+        \begin{itemize}
+            \item Both LU-IR and GMRES show good performance in terms of accuracy for well-conditioned matrices, even as the matrix size increases.
+           \item GMRES demonstrates exceptionally stable and efficient scaling in terms of time with matrix size, with only a slight increase in iterations needed.
+           \item The quadratic increase in computational time for LU-IR is typical for direct decomposition methods, while the near-linear scaling of GMRES highlights the advantages of iterative methods for large-scale computations.
+        \end{itemize}
+        \item Conclusion:
+        \begin{itemize}
+            \item     LU-IR shows expected scaling of time and iterations with matrix size but maintains high accuracy, which is a positive outcome for low condition numbers.
+           \item GMRES exhibits remarkable stability in the number of iterations and maintains accuracy, making it an excellent choice for larger matrices even as they grow in size.
+           \item The low condition number of the matrices aids in both algorithms' performance, ensuring numerical stability and reliable accuracy.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{High condition numbered matrix:}
+    \begin{itemize}
+        \item GMRES:
+        \begin{itemize}
+            \item Time vs. Matrix Size :
+            \begin{itemize}
+                \item GMRES shows a near-linear increase in computational time with the size of the matrix. This performance is remarkable, considering that iterative methods can be sensitive to matrix conditioning. The near-linear relationship might be a consequence of effective preconditioning or the specific matrix structures enabling more efficient computation.
+            \end{itemize}
+           \item Iterations vs. Matrix Size:
+           \begin{itemize}
+               \item The number of iterations needed by GMRES also increases linearly with matrix size. This is typical for iterative methods, where the number of iterations needed tends to increase with problem size but is also influenced by the conditioning of the matrix and the effectiveness of any preconditioner used.
+           \end{itemize}
+           \item Accuracy vs. Matrix Size:
+           \begin{itemize}
+               \item The accuracy graph suggests that the solutions become less accurate as the matrix size increases. This is an expected trend for high condition number matrices, as the error is more likely to propagate and accumulate over iterations in large-scale problems.
+           \end{itemize}
+        \end{itemize}
+        \item LU-IR:
+        \begin{itemize}
+            \item Time vs. Matrix Size:
+            \begin{itemize}
+                \item The computational time for LU-IR grows almost linearly with the matrix size, which is better than the expected cubic time complexity of the LU decomposition. This may indicate that the specific characteristics of the matrices being used allow for faster computation, even though they are poorly conditioned.
+            \end{itemize}
+           \item Iterations vs. Matrix Size:
+           \begin{itemize}
+               \item The graph shows a decreasing number of iterations required as the matrix size increases, which is counterintuitive because poorly conditioned matrices typically require more iterative refinement. This could be a result of the iterative refinement process reaching a specified precision limit sooner for larger matrices, or due to specific properties of the matrices being tested.
+           \end{itemize}
+           \item Accuracy vs. Matrix Size :
+           \begin{itemize}
+               \item The accuracy decreases as the matrix size increases, which aligns with expectations; larger and poorly conditioned matrices amplify numerical errors, leading to less accurate solutions.
+           \end{itemize}
+        \end{itemize}
+        \item Comparative Analysis:
+        \begin{itemize}
+            \item  Time vs. Matrix Size:
+            \begin{itemize}
+                \item GMRES shows a near-linear increase in computational time with the size of the matrix. This performance is remarkable, considering that iterative methods can be sensitive to matrix conditioning. The near-linear relationship might be a consequence of effective preconditioning or the specific matrix structures enabling more efficient computation.
+            \end{itemize}
+            \item Iterations vs. Matrix Size:
+            \begin{itemize}
+                \item The number of iterations needed by GMRES also increases linearly with matrix size. This is typical for iterative methods, where the number of iterations needed tends to increase with problem size but is also influenced by the conditioning of the matrix and the effectiveness of any preconditioner used.
+            \end{itemize}
+           \item Accuracy vs. Matrix Size:
+           \begin{itemize}
+               \item The accuracy graph suggests that the solutions become less accurate as the matrix size increases. This is an expected trend for high condition number matrices, as the error is more likely to propagate and accumulate over iterations in large-scale problems.
+           \end{itemize}
+           \item Conclusition:
+           \begin{itemize}
+               \item For high condition numbers, both algorithms scale similarly in time with increasing matrix size, with GMRES showing a slight advantage in iterations.
+                \item The decrease in accuracy with matrix size is a clear indication that both algorithms are affected by the high condition number, though this effect seems to be slightly less severe for GMRES.
+            \item The results suggest that while GMRES maintains its stability in terms of iterations required, LU-IR may have limitations in the accuracy and effectiveness of its iterative refinements as the matrix size grows.
+           \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    
+    
+\end{enumerate}
+\clearpage

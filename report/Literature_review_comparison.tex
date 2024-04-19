@@ -1,0 +1,77 @@
+\subsection{Comparative Analysis of GMRES-IR and LU-IR}
+
+This section conducts a comparative analysis of GMRES-based IR(GMRES-IR) and LU-based IR(LU-IR) in terms of accuracy, convergence, and performance in a mixed-precision setting.
+\subsubsection{LU-IR}
+Iterative refinement has traditionally used $LU$ factorization as the inner solver. A basic iterative refinement algorithm using $LU$ factorization can be described as follows:
+
+\begin{algorithm}
+    \caption{LU-IR. $A \in \mathbb{R}^{n \times n}$ is nonsingular and $b \in \mathbb{R}^n$. Three precisions are used, satisfying $u_r \leq u \leq u_l$.}
+    \begin{algorithmic}[1]
+        \State Compute the factorization $A = LU$ in precision $u_l$.
+        \State Solve $LUx_1 = b$ by substitution in precision $u_l$.
+        \For{$i = 1:i_{\max}$ or until converged}
+            \State Compute $r_i = b - Ax_i$ in precision $u_r$.
+            \State Solve $LUd_i = r_i$ by substitution in precision $u_l$.
+            \State Update $x_{i+1} = x_i + d_i$ in precision $u$.
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+Here the most computational heavy step is the $LU$ factorization, which costs $O(n^3)$ flop. The substitutions on line 5 costs in total $O(Kn^2)$ flops, which is negligible compared to $LU$ factorization for large $n$ and reasonable $K$ ($K$ is the total number of iterations). So by adopting a lower precision for $u_l$, the computational cost can be greatly reduced. With half-precision availability ($u_{16}$), the potential speedup with $u=u_r=u_{64}$ and $u_l=u_{16}$ on an NVIDIA P100 GPU can reach 2.7. 
+
+The convergence of LU-IR depends on various factors, including numerical stability of the $LU$ decomposition, precision scheme, and also the condition of $A$. Specifically, with $\kappa(A)u_l \ll 1$ and a numerically stable $LU$ decomposition, convergence is guaranteed. However, when lower precision is applied (especially in half-precision schemes), the requirement for $\kappa(A)$ tightens. For instance, with fp16, the unit round-off $u_{16}=u_l\approx 2^{-11}$, rendering $\kappa(A)\ll 2000$. With bfloat16, the unit round-off $u_{16}=u_l\approx 2^{-8}$, giving an even tighter bound $\kappa(A)\ll 300$. This marks one limitation of LU-based IR, which is the convergence heavily relies on the system condition and unit round-off. Especially in a half-precision computing setting, this condition limitation of LU-IR render itself a strict and picky solver\cite{Azzam2020}.
+
+The above algorithm achieves a relative error bounded approximately by $3n\||A^{-1}||\hat{L}||\hat{U}|\|u_l$.
+
+
+\subsubsection{GMRES-IR}
+The GMRES-based iterative refinement (GMRES-IR) in a mixed-precision setting can be described as follows:
+
+\begin{algorithm}
+    \caption{GMRES-IR. $A \in \mathbb{R}^{n \times n}$ is nonsingular and $b \in \mathbb{R}^n$. Five precisions are used: $u_r$, $u_g$, $u_p$, $u$, $u_l$.}
+    \begin{algorithmic}[1]
+        \State Compute the factorization $A = LU$ in precision $u_l$.
+        \State Solve $LUx_1 = b$ by substitution in precision $u_l$.
+        \For{$i = 1:i_{\max}$ or until converged}
+            \State Compute $r_i = b - Ax_i$ in precision $u_r$.
+            \State Solve $U^{-1}L^{-1}Ad_i = U^{-1}L^{-1}r_i$ by GMRES in precision $u_g$, performing the products with $U^{-1}L^{-1}A$ in precision $u_p$.
+            \State Compute $x_{i+1} = x_i + d_i$ in precision $u$.
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+An important feature of GMRES-IR is its applicability to extremely ill-condition matrices.
+
+In algorithm 2 line 4 , denote the relative error:
+\[
+    \xi_i = \frac{\|d_i - \hat{d_i}\|_{\infty}}{\|d_i\|_{\infty}}
+\]
+Let
+\[
+\mu_i = \frac{\|A(\mathbf{x}_i - \hat{\mathbf{x}}_i)\|_{\infty}}{\|A\|_{\infty}\|\mathbf{x}_1 - \hat{\mathbf{x}}_i\|_{\infty}} \leq 1,
+\]
+\[
+\phi_i = 2 \min(\text{cond}(A), \kappa_{\infty}(A)\mu_i) u_l + \xi_i,
+\]
+where cond(A) = $\||A^{-1}||A||x|\|_\infty$.
+As long as $\phi_i$ is sufficiently less than 1, $\xi_i$ is reduced at each iteration until an iterate $\hat{x}$ is obtained such that:
+\[
+    \frac{\|x - \hat{x}\|_{\infty}}{\|x\|_{\infty}} \lesssim u+4p\ cond(A,x)u_r
+\]
+where $p$ is the maximum number of nonzeros in any row of $[A\ b]$, and cond(A,x) is defined as
+\[
+cond(A,x)=\frac{\||A^{-1}||A||x|\|_{\infty}}{\|x\|_{\infty}}.
+\]
+
+
+This accuracy bound depends on precisions $u$ and $u_r$, and is independent of precision $u_l$ and $x_1$. This motivates adopting a higher precision for the residual $u_r$. It's experimented that by adopting $u=u_l$ and $u_r=u_g=u_p=u^2$, $\xi_i\approx u$ as long as $\kappa(A)\approx u^{-1}$, indicating that the error is of the same order as the precision of the computation regardless of the system condition. This is a significant result, as it suggests that systems that are ill-conditioned, which would typically be problematic due to their high sensitivity to errors, can still be solved to a high degree of accuracy using GMRES-IR, with the caveat that a higher precision is used in part of the computation to control the growth of errors. This demonstrates the advantage of GMRES-based IR over LU-based IR, where the requirement for system condition is greatly relaxed with reasonable computational overhead\cite{Boris2021}. 
+
+In terms of error behavior, one caveat of using GMRES-based method is the possibility of error accumulation inside the subspace iteration. As a Krylov subspace iterative method, round-off errors accumulated along the recurrent chain might result in a considerable deviation from the true value. Here the trade-off is, the longer the Krylov subspace constructed, the more dimensions available and therefore higher accuracy solution and faster convergence, while at the same time it also leads to larger chance of round-off error accumulation as a result of long inner iteration chain. A possible mitigation to such problem is the constant restart, where the Krylov subspace is reset after a preset amount of iterations. In the iterative refinement setting, as GMRES is employeed as a inner solver, the returning to the outer loop itself acts as a reset on the subspace. Thus the enforced restart is more likely to be triggered with a low or no preconditioning, as in such case more calculation is carried out inside the Krylov subspace.
+
+In the above algorithm, the preconditioner $U^{-1}L^{-1}$ is used, which costs $O(n^3)$ flops. To avoid such cost, it's also possible to use a less computational expensive preconditioner for GMRES-IR, or even no preconditioner at all. With this tradeoff, larger iteration count is expected, but convergence is still guaranteed with condition $\kappa(A)u_l \ll 1$ met. Examples of less costy preconditioners used in GMRES-IR include  incomplete $LU$ factorization, block Jacobi and polynomial preconditioners\cite{Loe2021},  With less restrict preconditioning and system condition requirements, GMRES-IR can choose more flexible precision schemes compared to LU-IR, thus utilizing mixed-precision computing to a higher level. 
+
+\clearpage
+
+
+
+
