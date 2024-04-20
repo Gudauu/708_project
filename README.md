@@ -5,8 +5,6 @@
 - **Import the Code Files:** First, import the necessary Matlab code files into the present working directory of your Matlab workspace. The required files include:
   - `genMatrix.m`
   - `iterref.m`
-  - `lu_ir.m`
-  - `gmres_ir.m`
   - `hign_cond.m`
   - `low_cond.m`
   - `small_size.m`
